@@ -41,7 +41,7 @@ public class ClickbaitService {
 						newsFeature.getCountLetter(),
 						newsFeature.getCountInvertedSentence(),
 						newsFeature.getCountAdditional(),
-						newsFeature.getCountEllipsis(),
+						newsFeature.getCountTripleDot(),
 						newsFeature.getCountDot(),
 						newsFeature.getCountQuestionMark(),
 						newsFeature.getCountExclamationPoint(),

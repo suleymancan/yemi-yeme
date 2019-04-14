@@ -24,7 +24,7 @@ public class NewsFeatures implements Serializable {
 
 	private double countAdditional;
 
-	private double countEllipsis;
+	private double countTripleDot;
 
 	private double countDot;
 
