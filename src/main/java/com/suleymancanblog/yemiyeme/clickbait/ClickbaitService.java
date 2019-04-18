@@ -1,6 +1,7 @@
 package com.suleymancanblog.yemiyeme.clickbait;
 
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.mllib.linalg.Vector;
@@ -17,6 +18,7 @@ import java.util.Collections;
  */
 @Service
 @AllArgsConstructor
+@Slf4j
 public class ClickbaitService {
 
 	private final JavaSparkContext javaSparkContext;
@@ -32,28 +34,54 @@ public class ClickbaitService {
 
 	}
 
-	public NewsLabel predict(NewsFeatures newsFeatures) {
+/*	public void test(){
+		try {
+			final model.data.corpus.ToArffFileCorpus toArffFileCorpus = new model.data.corpus.ToArffFileCorpus("/home/suleymancan/haber/test", util.Language.TR);
+			final model.feature.corpus.CountFeatureCorpus countFeatures = engine.extracting.CountsExtractor.getCountFeatures(toArffFileCorpus);
+			final util.FeatureMatrix featureMatrix = countFeatures.getFeatureMatrix();
+			final List<FeatureMatrix> featureMatrices = Arrays.asList(featureMatrix);
+			engine.writing.WriterEngine.createArffFiles(featureMatrices, "/home/suleymancan/haber/test");
+		}
+		catch (FileNotFoundException e) {
+			log.error(e.getMessage(), e);
+		}
+		catch (exception.T2AInputFileException e) {
+			log.error(e.getMessage(), e);
+		}
+		catch (IOException e) {
+			log.error(e.getMessage(), e);
+		}
+		catch (exception.T2AInvalidParameterException e) {
+			log.error(e.getMessage(), e);
+		}
+		catch (exception.T2AMatrixException e) {
+			log.error(e.getMessage(), e);
+		}
+	}*/
+
+
+	public NewsLabel predict(NewsFeaturesPrizma newsFeaturesPrizma) {
 		//@formatter:off
-		final JavaRDD<Vector> vectorJavaRDD = javaSparkContext.parallelize(Collections.singletonList(newsFeatures))
+		final JavaRDD<Vector> vectorJavaRDD = javaSparkContext.parallelize(Collections.singletonList(newsFeaturesPrizma))
 				.map(newsFeature -> Vectors.dense( // order is important!
-						newsFeature.getCountSentence(),
-						newsFeature.getCountWord(),
-						newsFeature.getCountLetter(),
-						newsFeature.getCountInvertedSentence(),
-						newsFeature.getCountAdditional(),
-						newsFeature.getCountTripleDot(),
-						newsFeature.getCountDot(),
-						newsFeature.getCountQuestionMark(),
-						newsFeature.getCountExclamationPoint(),
-						newsFeature.getCountSpace(),
-						newsFeature.getCountComma(),
-						newsFeature.getCountSemiColon(),
-						newsFeature.getCountColon(),
-						newsFeature.getCountQuote(),
-						newsFeature.getCountWordPerSentence(),
-						newsFeature.getCountAdditionalPerSentence(),
-						newsFeature.getCountAdditionalPerWord(),
-						newsFeature.getCountLetterPerWord()
+						newsFeature.getAvgParagraphLengthWithSpace(),
+						newsFeature.getAvgParagraphLengthWithoutSpace(),
+						newsFeature.getAvgSentenceLength(),
+						newsFeature.getEmptyParagraphRatio(),
+						newsFeature.getLengthOfTitle(),
+						newsFeature.getParagraphCount(),
+						newsFeature.getPunctuationAsteriksRatio(),
+						newsFeature.getPunctuationColonRatio(),
+						newsFeature.getPunctuationCommaRatio(),
+						newsFeature.getPunctuationCountOfTitle(),
+						newsFeature.getPunctuationDashRatio(),
+						newsFeature.getPunctuationDoubleQuoteRatio(),
+						newsFeature.getPunctuationEllipsisRatio(),
+						newsFeature.getPunctuationExclamationRatio(),
+						newsFeature.getPunctuationRatio(),
+						newsFeature.getPunctuationSemicolonRatio(),
+						newsFeature.getStopWordRatio(),
+						newsFeature.getWordLengthVariance()
 												 ));
 		//@formatter:on
 		final double predicition = decisionTreeModel.predict(vectorJavaRDD).first();

@@ -25,9 +25,9 @@ public class YemiYemeDecisionTreeModelGenerator {
 
 	private static final String MASTER = "local";
 
-	private static final String DATA_PATH = "/home/suleymancan/dev/yemi-yeme/src/main/resources/static/yemi-yeme-dataset.txt";
+	private static final String DATA_PATH = "/home/suleymancan/dev/yemi-yeme/src/main/resources/static/yemi-yeme-prizma-dataset.txt";
 
-	private static final String MODEL_SAVE_PATH = "/home/suleymancan/dev/yemi-yeme/src/main/resources/static/model/YemiYemeModel";
+	private static final String MODEL_SAVE_PATH = "/home/suleymancan/dev/yemi-yeme/src/main/resources/static/model/prizma/YemiYemeModel";
 
 	public static void main(String[] args) {
 		final SparkConf sparkConf = new SparkConf().setAppName(APP_NAME).setMaster(MASTER);

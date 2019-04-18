@@ -2,10 +2,7 @@ package com.suleymancanblog.yemiyeme.clickbait;
 
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * Created on April, 2019
@@ -19,10 +16,16 @@ public class ClickbaitRestController {
 
 	private final ClickbaitService clickbaitService;
 
+	@GetMapping
+	public String test(){
+		//clickbaitService.test();
+		return "hello";
+	}
+
 	@PostMapping
-	public ResponseEntity<?> predictClickbait(@RequestBody NewsFeatures newsFeatures){
+	public ResponseEntity<?> predictClickbait(@RequestBody NewsFeaturesPrizma newsFeaturesPrizma){
 		try {
-			final NewsLabel predict = clickbaitService.predict(newsFeatures);
+			final NewsLabel predict = clickbaitService.predict(newsFeaturesPrizma);
 			return ResponseEntity.ok(predict);
 		}
 		catch (Exception e){
