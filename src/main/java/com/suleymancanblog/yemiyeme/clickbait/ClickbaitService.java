@@ -31,7 +31,7 @@ public class ClickbaitService {
 
 	private final PrizmaPunctuationService newsFeaturePunctuationService;
 
-	private static NewsLabel doubleResultConvertText(double result) {
+	private NewsLabel doubleResultConvertText(double result) {
 		if (result == 1.0)
 			return NewsLabel.CLICKBAIT;
 		if (result == 0.0)
@@ -40,7 +40,7 @@ public class ClickbaitService {
 
 	}
 
-	public PrizmaFeature createNewsFeature(String source){
+	PrizmaFeature createNewsFeature(String source){
 		//@formatter:off
 		final PrizmaFeature prizmaFeature = PrizmaFeature.builder()
 				.lengthOfTitle(Double.valueOf(prizmaFeatureService.lengthOfTitle(source)))
@@ -66,7 +66,7 @@ public class ClickbaitService {
 	}
 
 
-	public NewsLabel predict(PrizmaFeature prizmaFeature) {
+	NewsLabel predict(PrizmaFeature prizmaFeature) {
 		//@formatter:off
 		final JavaRDD<Vector> vectorJavaRDD = javaSparkContext.parallelize(Collections.singletonList(prizmaFeature))
 				.map(feature -> Vectors.dense( // order is important!

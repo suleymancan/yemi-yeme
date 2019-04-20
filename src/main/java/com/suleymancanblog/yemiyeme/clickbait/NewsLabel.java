@@ -5,7 +5,7 @@ package com.suleymancanblog.yemiyeme.clickbait;
  *
  * @author suleymancan
  */
-public enum NewsLabel {
+enum NewsLabel {
 
 	CLICKBAIT, NON_CLICKBAIT
 }

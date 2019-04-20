@@ -14,7 +14,7 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class PrizmaFeature implements Serializable {
+class PrizmaFeature implements Serializable {
 
 	private double lengthOfTitle;
 
