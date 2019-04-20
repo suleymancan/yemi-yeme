@@ -7,5 +7,5 @@ package com.suleymancanblog.yemiyeme.clickbait;
  */
 public enum NewsLabel {
 
-	ClICKBAIT, NON_CLICKBAIT
+	CLICKBAIT, NON_CLICKBAIT
 }

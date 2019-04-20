@@ -1,6 +1,5 @@
 package com.suleymancanblog.yemiyeme.clickbait;
 
-import com.suleymancanblog.yemiyeme.prizma.NewsFeature;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,15 +18,15 @@ public class ClickbaitRestController {
 
 	@GetMapping
 	public String test(){
-		final NewsFeature newsFeature = clickbaitService.createNewsFeature("Ali Koç’tan tarihi itiraf: Utanıyorum");
-		final NewsLabel predict = clickbaitService.predict(newsFeature);
+		final PrizmaFeature prizmaFeature = clickbaitService.createNewsFeature("Telefon sahiplerine çok önemli uyarı: Bugünden itibaren kullandığınız telefonlar artık...");
+		final NewsLabel predict = clickbaitService.predict(prizmaFeature);
 		return predict.toString();
 	}
 
 	@PostMapping
-	public ResponseEntity<?> predictClickbait(@RequestBody NewsFeature newsFeature){
+	public ResponseEntity<?> predictClickbait(@RequestBody PrizmaFeature prizmaFeature){
 		try {
-			final NewsLabel predict = clickbaitService.predict(newsFeature);
+			final NewsLabel predict = clickbaitService.predict(prizmaFeature);
 			return ResponseEntity.ok(predict);
 		}
 		catch (Exception e){

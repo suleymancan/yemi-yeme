@@ -1,8 +1,7 @@
 package com.suleymancanblog.yemiyeme.clickbait;
 
-import com.suleymancanblog.yemiyeme.prizma.NewsFeature;
-import com.suleymancanblog.yemiyeme.prizma.NewsFeaturePunctuationService;
-import com.suleymancanblog.yemiyeme.prizma.NewsFeatureService;
+import com.suleymancanblog.yemiyeme.prizma.PrizmaPunctuationService;
+import com.suleymancanblog.yemiyeme.prizma.PrizmaFeatureService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.spark.api.java.JavaRDD;
@@ -28,29 +27,24 @@ public class ClickbaitService {
 
 	private final DecisionTreeModel decisionTreeModel;
 
-	private final NewsFeatureService newsFeatureService;
+	private final PrizmaFeatureService prizmaFeatureService;
 
-	private final NewsFeaturePunctuationService newsFeaturePunctuationService;
+	private final PrizmaPunctuationService newsFeaturePunctuationService;
 
 	private static NewsLabel doubleResultConvertText(double result) {
 		if (result == 1.0)
-			return NewsLabel.ClICKBAIT;
+			return NewsLabel.CLICKBAIT;
 		if (result == 0.0)
 			return NewsLabel.NON_CLICKBAIT;
 		throw new IllegalArgumentException("Unexpected prediction result: " + result);
 
 	}
 
-	public NewsFeature createNewsFeature(String source){
+	public PrizmaFeature createNewsFeature(String source){
 		//@formatter:off
-		final NewsFeature newsFeature = NewsFeature.builder()
-				.avgParagraphLengthWithoutSpace(Double.valueOf(newsFeatureService.avgParagraphLengthWithoutSpace(source)))
-				.avgParagraphLengthWithSpace(Double.valueOf(newsFeatureService.avgParagraphLengthWithSpace(source)))
-				.avgSentenceLength(Double.valueOf(newsFeatureService.avgSentenceLength(source)))
-				.emptyParagraphRatio(Double.valueOf(newsFeatureService.emptyParagraphRatio(source)))
-				.lengthOfTitle(Double.valueOf(newsFeatureService.lengthOfTitle(source)))
-				.paragraphCount(Double.valueOf(newsFeatureService.paragraphCount(source)))
-				.punctuationAsteriksRatio(Double.valueOf(newsFeaturePunctuationService.punctuationAsteriksRatio(source)))
+		final PrizmaFeature prizmaFeature = PrizmaFeature.builder()
+				.lengthOfTitle(Double.valueOf(prizmaFeatureService.lengthOfTitle(source)))
+				.numberCount(Double.valueOf(prizmaFeatureService.numberCount(source)))
 				.punctuationColonRatio(Double.valueOf(newsFeaturePunctuationService.punctuationColonRatio(source)))
 				.punctuationCommaRatio(Double.valueOf(newsFeaturePunctuationService.punctuationCommaRatio(source)))
 				.punctuationCountOfTitle(Double.valueOf(newsFeaturePunctuationService.punctuationCountOfTitle(source)))
@@ -58,28 +52,26 @@ public class ClickbaitService {
 				.punctuationDoubleQuoteRatio(Double.valueOf(newsFeaturePunctuationService.punctuationDoubleQuoteRatio(source)))
 				.punctuationEllipsisRatio(Double.valueOf(newsFeaturePunctuationService.punctuationEllipsisRatio(source)))
 				.punctuationExclamationRatio(Double.valueOf(newsFeaturePunctuationService.punctuationExclamationRatio(source)))
+				.punctuationQuestionMarkRatio(Double.valueOf(newsFeaturePunctuationService.punctuationQuestionMarkRatio(source)))
 				.punctuationRatio(Double.valueOf(newsFeaturePunctuationService.punctuationRatio(source)))
 				.punctuationSemiColonRatio(Double.valueOf(newsFeaturePunctuationService.punctuationSemiColonRatio(source)))
-				.stopWordRatio(Double.valueOf(newsFeatureService.stopWordRatio(source)))
-				.subtitleRatio(Double.valueOf(newsFeatureService.subtitleRatio(source)))
-				.wordLengthVariance(Double.valueOf(newsFeatureService.wordLengthVariance(source)))
+				.stopWordRatio(Double.valueOf(prizmaFeatureService.stopWordRatio(source)))
+				.whyCount(Double.valueOf(prizmaFeatureService.whyCount(source)))
+				.wordCountOfTitle(Double.valueOf(prizmaFeatureService.wordCountOfTitle(source)))
+				.wordLengthAverage(Double.valueOf(prizmaFeatureService.wordLengthAverage(source)))
+				.wordLengthVariance(Double.valueOf(prizmaFeatureService.wordLengthVariance(source)))
 				.build();
 		//@formatter:on
-		return newsFeature;
+		return prizmaFeature;
 	}
 
 
-	public NewsLabel predict(NewsFeature newsFeature) {
+	public NewsLabel predict(PrizmaFeature prizmaFeature) {
 		//@formatter:off
-		final JavaRDD<Vector> vectorJavaRDD = javaSparkContext.parallelize(Collections.singletonList(newsFeature))
+		final JavaRDD<Vector> vectorJavaRDD = javaSparkContext.parallelize(Collections.singletonList(prizmaFeature))
 				.map(feature -> Vectors.dense( // order is important!
-						feature.getAvgParagraphLengthWithSpace(),
-						feature.getAvgParagraphLengthWithoutSpace(),
-						feature.getAvgSentenceLength(),
-						feature.getEmptyParagraphRatio(),
 						feature.getLengthOfTitle(),
-						feature.getParagraphCount(),
-						feature.getPunctuationAsteriksRatio(),
+						feature.getNumberCount(),
 						feature.getPunctuationColonRatio(),
 						feature.getPunctuationCommaRatio(),
 						feature.getPunctuationCountOfTitle(),
@@ -87,9 +79,13 @@ public class ClickbaitService {
 						feature.getPunctuationDoubleQuoteRatio(),
 						feature.getPunctuationEllipsisRatio(),
 						feature.getPunctuationExclamationRatio(),
+						feature.getPunctuationQuestionMarkRatio(),
 						feature.getPunctuationRatio(),
 						feature.getPunctuationSemiColonRatio(),
 						feature.getStopWordRatio(),
+						feature.getWhyCount(),
+						feature.getWordCountOfTitle(),
+						feature.getWordLengthAverage(),
 						feature.getWordLengthVariance()
 												 ));
 		//@formatter:on

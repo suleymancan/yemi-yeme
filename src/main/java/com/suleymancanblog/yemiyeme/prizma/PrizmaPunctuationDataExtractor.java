@@ -3,19 +3,19 @@ package com.suleymancanblog.yemiyeme.prizma;
 import lombok.NoArgsConstructor;
 
 /**
- * Codes in this class belong to the prizma project. (Minor improvements may have been made.)
+ * Codes in this class belong to the prizma project.
  * https://code.google.com/archive/p/prizma-text-classification/
- *
  */
 @NoArgsConstructor
-public class NewsFeaturePunctuationDataExtractor {
+public class PrizmaPunctuationDataExtractor {
 
 	private int punctuationCount;
+
 	private int totalPunctuationCount;
+
 	private int letterOrDigitCount;
 
-
-	NewsFeaturePunctuationDataExtractor(String source, char punctuation) {
+	PrizmaPunctuationDataExtractor(String source, char punctuation) {
 		extractPunctuationData(source, punctuation);
 	}
 
@@ -29,7 +29,8 @@ public class NewsFeaturePunctuationDataExtractor {
 			// aradığımız punctuation toplam punctuation sayısına da dahil edilsin.
 			if (Character.isLetterOrDigit(c)) {
 				letterOrDigitCount++;
-			} else if (!Character.isWhitespace(c)) {
+			}
+			else if (!Character.isWhitespace(c)) {
 				totalPunctuationCount++;
 			}
 		}

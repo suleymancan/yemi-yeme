@@ -7,46 +7,37 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * Codes in this class belong to the prizma project. (Minor improvements may have been made.)
+ * Codes in this class belong to the prizma project.
  * https://code.google.com/archive/p/prizma-text-classification/
- *
  */
 @Service
-public class NewsFeaturePunctuationService {
+public class PrizmaPunctuationService {
 
-	@Autowired
-	private NewsFeauteUtilService newsFeauteUtilService;
-
-	/**
-	 *
-	 * @author test
-	 */
-	private static final char ASTERIKS = '*';
 	private static final char COLON = ':';
+
 	private static final char SEMI_COLON = ';';
+
 	private static final char COMMA = ',';
+
 	private static final char DASH = '-';
+
 	private static final char DOUBLE_QUOTE = '"';
+
 	private static final char EXCLAMATION = '!';
+
 	private static final char QUESTION_MARK = '?';
 
-	private NewsFeaturePunctuationDataExtractor extractor;
+	@Autowired
+	private PrizmaFeatureUtilService prizmaFeatureUtilService;
 
+	private PrizmaPunctuationDataExtractor extractor;
 
-	/**
-	 *
-	 * @author test
-	 */
-	 private String extractRatioAsFormattedString(String source, char ch) {
-		extractor = new NewsFeaturePunctuationDataExtractor(source, ch);
+	private String extractRatioAsFormattedString(String source, char ch) {
+		extractor = new PrizmaPunctuationDataExtractor(source, ch);
 		double ratio = getPunctuationRatio();
-		return newsFeauteUtilService.formatDouble(ratio, "#.###");
+		return prizmaFeatureUtilService.formatDouble(ratio, "#.###");
 	}
 
-	/**
-	 *
-	 * @author test
-	 */
 	private double getPunctuationRatio() {
 		int punctuationCount = extractor.getPunctuationCount();
 		int totalPunctuationCount = extractor.getTotalPunctuationCount();
@@ -54,40 +45,17 @@ public class NewsFeaturePunctuationService {
 		return ratio;
 	}
 
-
-	/**
-	 *
-	 * @author hrzafer
-	 */
-	public String punctuationAsteriksRatio(String source){
-		return extractRatioAsFormattedString(source, ASTERIKS);
-	}
-
-	/**
-	 *
-	 * @author hrzafer
-	 */
-	public String punctuationColonRatio(String source){
+	public String punctuationColonRatio(String source) {
 		return extractRatioAsFormattedString(source, COLON);
 	}
-	/**
-	 *
-	 * @author hrzafer
-	 */
-	public String punctuationCommaRatio(String source){
+
+	public String punctuationCommaRatio(String source) {
 		return extractRatioAsFormattedString(source, COMMA);
 	}
 
-	/**
-	 *
-	 * @author Ziynet Nesibe DAYIOGLU
-	 * ziynetnesibe@gmail.com www.ziynetnesibe.com <br/>
-	 *
-	 * This class contains an attribute which counts the punctuation mark count of the title
-	 */
 	public String punctuationCountOfTitle(String source) {
 		int punctCount = 0;
-		String titleOfText = newsFeauteUtilService.getTitleOfText(source);
+		String titleOfText = prizmaFeatureUtilService.getTitleOfText(source);
 		if (titleOfText != null) {
 			Pattern p = Pattern.compile("[^a-zA-Z0-9 ŞşÇçÖöĞğÜüİı]");
 			Matcher m = p.matcher(titleOfText);
@@ -101,28 +69,16 @@ public class NewsFeaturePunctuationService {
 		return Integer.toString(punctCount);
 	}
 
-	/**
-	 *
-	 * @author hrzafer
-	 */
-	public String punctuationDashRatio(String source){
+	public String punctuationDashRatio(String source) {
 		return extractRatioAsFormattedString(source, DASH);
 	}
 
-	/**
-	 *
-	 * @author hrzafer
-	 */
-	public String punctuationDoubleQuoteRatio(String source){
+	public String punctuationDoubleQuoteRatio(String source) {
 		return extractRatioAsFormattedString(source, DOUBLE_QUOTE);
 	}
 
-	/**
-	 *
-	 * @author hrzafer
-	 */
 	public String punctuationEllipsisRatio(String source) {
-		NewsFeaturePunctuationDataExtractor extractor = new NewsFeaturePunctuationDataExtractor(source, '.');
+		PrizmaPunctuationDataExtractor extractor = new PrizmaPunctuationDataExtractor(source, '.');
 		int totalPunctuationCount = extractor.getTotalPunctuationCount();
 		int ellipsisCount = 0;
 		Pattern pattern = Pattern.compile("\\.\\.\\.");
@@ -132,37 +88,27 @@ public class NewsFeaturePunctuationService {
 		}
 		totalPunctuationCount -= ellipsisCount * 2;
 		double ratio = (double) ellipsisCount / totalPunctuationCount;
-		return newsFeauteUtilService.formatDouble(ratio, "#.###");
+		return prizmaFeatureUtilService.formatDouble(ratio, "#.###");
 	}
 
-	/**
-	 *
-	 * @author hrzafer
-	 */
-	public String punctuationExclamationRatio(String source){
+	public String punctuationExclamationRatio(String source) {
 		return extractRatioAsFormattedString(source, EXCLAMATION);
 	}
 
-	/**
-	 *
-	 * @author hrzafer
-	 */
+	public String punctuationQuestionMarkRatio(String source) {
+		return extractRatioAsFormattedString(source, QUESTION_MARK);
+	}
+
 	public String punctuationRatio(String source) {
-		NewsFeaturePunctuationDataExtractor extractor = new NewsFeaturePunctuationDataExtractor(source, Character.MAX_VALUE);
+		PrizmaPunctuationDataExtractor extractor = new PrizmaPunctuationDataExtractor(source, Character.MAX_VALUE);
 		int totalPunctuationCount = extractor.getTotalPunctuationCount();
 		int letterOrDigitCount = extractor.getLetterOrDigitCount();
 		double ratio = (double) totalPunctuationCount / letterOrDigitCount;
-		return newsFeauteUtilService.formatDouble(ratio, "#.##");
+		return prizmaFeatureUtilService.formatDouble(ratio, "#.##");
 	}
 
-	public String punctuationSemiColonRatio(String source){
+	public String punctuationSemiColonRatio(String source) {
 		return extractRatioAsFormattedString(source, SEMI_COLON);
 	}
-
-
-
-
-
-
 
 }

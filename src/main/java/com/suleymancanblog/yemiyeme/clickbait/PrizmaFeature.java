@@ -1,34 +1,24 @@
-package com.suleymancanblog.yemiyeme.prizma;
+package com.suleymancanblog.yemiyeme.clickbait;
 
 import lombok.*;
 
 import java.io.Serializable;
 
 /**
- * Codes in this class belong to the prizma project. (Minor improvements may have been made.)
- * https://code.google.com/archive/p/prizma-text-classification/
+ * Created on April, 2019
  *
+ * @author suleymancan
  */
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class NewsFeature implements Serializable {
-
-	private double avgParagraphLengthWithoutSpace;
-
-	private double avgParagraphLengthWithSpace;
-
-	private double avgSentenceLength;
-
-	private double emptyParagraphRatio;
+public class PrizmaFeature implements Serializable {
 
 	private double lengthOfTitle;
 
-	private double paragraphCount;
-
-	private double punctuationAsteriksRatio;
+	private double numberCount;
 
 	private double punctuationColonRatio;
 
@@ -44,17 +34,20 @@ public class NewsFeature implements Serializable {
 
 	private double punctuationExclamationRatio;
 
+	private double punctuationQuestionMarkRatio;
+
 	private double punctuationRatio;
 
 	private double punctuationSemiColonRatio;
 
 	private double stopWordRatio;
 
-	private double subtitleRatio;
+	private double whyCount;
+
+	private double wordCountOfTitle;
+
+	private double wordLengthAverage;
 
 	private double wordLengthVariance;
-
-
-
 
 }
