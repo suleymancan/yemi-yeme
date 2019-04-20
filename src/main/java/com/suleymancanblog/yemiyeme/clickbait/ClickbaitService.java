@@ -1,5 +1,8 @@
 package com.suleymancanblog.yemiyeme.clickbait;
 
+import com.suleymancanblog.yemiyeme.prizma.NewsFeature;
+import com.suleymancanblog.yemiyeme.prizma.NewsFeaturePunctuationService;
+import com.suleymancanblog.yemiyeme.prizma.NewsFeatureService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.spark.api.java.JavaRDD;
@@ -25,6 +28,10 @@ public class ClickbaitService {
 
 	private final DecisionTreeModel decisionTreeModel;
 
+	private final NewsFeatureService newsFeatureService;
+
+	private final NewsFeaturePunctuationService newsFeaturePunctuationService;
+
 	private static NewsLabel doubleResultConvertText(double result) {
 		if (result == 1.0)
 			return NewsLabel.ClICKBAIT;
@@ -34,54 +41,56 @@ public class ClickbaitService {
 
 	}
 
-/*	public void test(){
-		try {
-			final model.data.corpus.ToArffFileCorpus toArffFileCorpus = new model.data.corpus.ToArffFileCorpus("/home/suleymancan/haber/test", util.Language.TR);
-			final model.feature.corpus.CountFeatureCorpus countFeatures = engine.extracting.CountsExtractor.getCountFeatures(toArffFileCorpus);
-			final util.FeatureMatrix featureMatrix = countFeatures.getFeatureMatrix();
-			final List<FeatureMatrix> featureMatrices = Arrays.asList(featureMatrix);
-			engine.writing.WriterEngine.createArffFiles(featureMatrices, "/home/suleymancan/haber/test");
-		}
-		catch (FileNotFoundException e) {
-			log.error(e.getMessage(), e);
-		}
-		catch (exception.T2AInputFileException e) {
-			log.error(e.getMessage(), e);
-		}
-		catch (IOException e) {
-			log.error(e.getMessage(), e);
-		}
-		catch (exception.T2AInvalidParameterException e) {
-			log.error(e.getMessage(), e);
-		}
-		catch (exception.T2AMatrixException e) {
-			log.error(e.getMessage(), e);
-		}
-	}*/
-
-
-	public NewsLabel predict(NewsFeaturesPrizma newsFeaturesPrizma) {
+	public NewsFeature createNewsFeature(String source){
 		//@formatter:off
-		final JavaRDD<Vector> vectorJavaRDD = javaSparkContext.parallelize(Collections.singletonList(newsFeaturesPrizma))
-				.map(newsFeature -> Vectors.dense( // order is important!
-						newsFeature.getAvgParagraphLengthWithSpace(),
-						newsFeature.getAvgParagraphLengthWithoutSpace(),
-						newsFeature.getAvgSentenceLength(),
-						newsFeature.getEmptyParagraphRatio(),
-						newsFeature.getLengthOfTitle(),
-						newsFeature.getParagraphCount(),
-						newsFeature.getPunctuationAsteriksRatio(),
-						newsFeature.getPunctuationColonRatio(),
-						newsFeature.getPunctuationCommaRatio(),
-						newsFeature.getPunctuationCountOfTitle(),
-						newsFeature.getPunctuationDashRatio(),
-						newsFeature.getPunctuationDoubleQuoteRatio(),
-						newsFeature.getPunctuationEllipsisRatio(),
-						newsFeature.getPunctuationExclamationRatio(),
-						newsFeature.getPunctuationRatio(),
-						newsFeature.getPunctuationSemicolonRatio(),
-						newsFeature.getStopWordRatio(),
-						newsFeature.getWordLengthVariance()
+		final NewsFeature newsFeature = NewsFeature.builder()
+				.avgParagraphLengthWithoutSpace(Double.valueOf(newsFeatureService.avgParagraphLengthWithoutSpace(source)))
+				.avgParagraphLengthWithSpace(Double.valueOf(newsFeatureService.avgParagraphLengthWithSpace(source)))
+				.avgSentenceLength(Double.valueOf(newsFeatureService.avgSentenceLength(source)))
+				.emptyParagraphRatio(Double.valueOf(newsFeatureService.emptyParagraphRatio(source)))
+				.lengthOfTitle(Double.valueOf(newsFeatureService.lengthOfTitle(source)))
+				.paragraphCount(Double.valueOf(newsFeatureService.paragraphCount(source)))
+				.punctuationAsteriksRatio(Double.valueOf(newsFeaturePunctuationService.punctuationAsteriksRatio(source)))
+				.punctuationColonRatio(Double.valueOf(newsFeaturePunctuationService.punctuationColonRatio(source)))
+				.punctuationCommaRatio(Double.valueOf(newsFeaturePunctuationService.punctuationCommaRatio(source)))
+				.punctuationCountOfTitle(Double.valueOf(newsFeaturePunctuationService.punctuationCountOfTitle(source)))
+				.punctuationDashRatio(Double.valueOf(newsFeaturePunctuationService.punctuationDashRatio(source)))
+				.punctuationDoubleQuoteRatio(Double.valueOf(newsFeaturePunctuationService.punctuationDoubleQuoteRatio(source)))
+				.punctuationEllipsisRatio(Double.valueOf(newsFeaturePunctuationService.punctuationEllipsisRatio(source)))
+				.punctuationExclamationRatio(Double.valueOf(newsFeaturePunctuationService.punctuationExclamationRatio(source)))
+				.punctuationRatio(Double.valueOf(newsFeaturePunctuationService.punctuationRatio(source)))
+				.punctuationSemiColonRatio(Double.valueOf(newsFeaturePunctuationService.punctuationSemiColonRatio(source)))
+				.stopWordRatio(Double.valueOf(newsFeatureService.stopWordRatio(source)))
+				.subtitleRatio(Double.valueOf(newsFeatureService.subtitleRatio(source)))
+				.wordLengthVariance(Double.valueOf(newsFeatureService.wordLengthVariance(source)))
+				.build();
+		//@formatter:on
+		return newsFeature;
+	}
+
+
+	public NewsLabel predict(NewsFeature newsFeature) {
+		//@formatter:off
+		final JavaRDD<Vector> vectorJavaRDD = javaSparkContext.parallelize(Collections.singletonList(newsFeature))
+				.map(feature -> Vectors.dense( // order is important!
+						feature.getAvgParagraphLengthWithSpace(),
+						feature.getAvgParagraphLengthWithoutSpace(),
+						feature.getAvgSentenceLength(),
+						feature.getEmptyParagraphRatio(),
+						feature.getLengthOfTitle(),
+						feature.getParagraphCount(),
+						feature.getPunctuationAsteriksRatio(),
+						feature.getPunctuationColonRatio(),
+						feature.getPunctuationCommaRatio(),
+						feature.getPunctuationCountOfTitle(),
+						feature.getPunctuationDashRatio(),
+						feature.getPunctuationDoubleQuoteRatio(),
+						feature.getPunctuationEllipsisRatio(),
+						feature.getPunctuationExclamationRatio(),
+						feature.getPunctuationRatio(),
+						feature.getPunctuationSemiColonRatio(),
+						feature.getStopWordRatio(),
+						feature.getWordLengthVariance()
 												 ));
 		//@formatter:on
 		final double predicition = decisionTreeModel.predict(vectorJavaRDD).first();
