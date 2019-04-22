@@ -7,5 +7,14 @@ package com.suleymancanblog.yemiyeme.clickbait;
  */
 enum NewsLabel {
 
-	CLICKBAIT, NON_CLICKBAIT
-}
+	CLICKBAIT("CLICKBAIT"), NOT_CLICKBAIT("NOT CLICKBAIT");
+
+	private final String newsLabel;
+
+	NewsLabel(String newsLabel) {
+		this.newsLabel = newsLabel;
+	}
+
+	public String getNewsLabel() {
+		return newsLabel;
+	}}

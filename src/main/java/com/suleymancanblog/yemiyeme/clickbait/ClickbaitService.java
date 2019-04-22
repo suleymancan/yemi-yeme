@@ -35,7 +35,7 @@ public class ClickbaitService {
 		if (result == 1.0)
 			return NewsLabel.CLICKBAIT;
 		if (result == 0.0)
-			return NewsLabel.NON_CLICKBAIT;
+			return NewsLabel.NOT_CLICKBAIT;
 		throw new IllegalArgumentException("Unexpected prediction result: " + result);
 
 	}
