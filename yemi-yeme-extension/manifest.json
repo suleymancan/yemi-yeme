@@ -4,7 +4,9 @@
     "manifest_version": 2,
     "author":"Süleyman Can",
     "description": "Stop Clickbait",
-    
+    "permissions": [
+        "contextMenus"
+    ],
     "browser_action": {
         "default_icon": "stop.png",
         "default_popup": "yemiyeme.html",
@@ -17,9 +19,7 @@
             ],
             "js": ["content.js"]
         }
-    ],
-    "background": {
-        "scripts" : ["background.js"]
-    }
+    ]
+
     
 }
