@@ -17,29 +17,31 @@ function createChildElement(responseText){
     return childElement;
 }
 
+
+
 function wordSelected(){
 
-
-
-    //burada a taginin textlerini otomatik sec.
     let tweetList = document.getElementsByClassName('TweetTextSize  js-tweet-text tweet-text');
 
     for(let tweet in tweetList){
-        let selectedText = tweetList[tweet].innerText;
-        if(selectedText && selectedText.length > 0){
-            let xhttp = new XMLHttpRequest();
-            let url = "http://localhost:8080/api/yemi-yeme?source="+selectedText;
+        if(tweetList[tweet].lang === 'tr' && tweetList[tweet].firstElementChild!=null && tweetList[tweet].firstElementChild.tagName === 'A' && tweetList[tweet].firstElementChild.hasAttribute('data-expanded-url')) {
+            let selectedText = tweetList[tweet].innerText;
+            console.log(selectedText);
+            if (selectedText && selectedText.length > 0) {
+                let xhttp = new XMLHttpRequest();
+                let url = "http://localhost:8080/api/yemi-yeme?source=" + selectedText;
 
-            xhttp.onreadystatechange = function(){
+                xhttp.onreadystatechange = function () {
 
-                if(this.readyState == 4 && this.status == 200){
-                    tweetList[tweet].appendChild(createChildElement(this.responseText));
-                }
+                    if (this.readyState == 4 && this.status == 200) {
+                        tweetList[tweet].appendChild(createChildElement(this.responseText));
+                    }
 
-            };
-            xhttp.open("GET",url, true);
-            xhttp.send();
+                };
+                xhttp.open("GET", url, true);
+                xhttp.send();
 
+            }
         }
     }
 
