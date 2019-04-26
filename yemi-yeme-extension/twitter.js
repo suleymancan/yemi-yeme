@@ -9,7 +9,7 @@ function pageLoad() {
 
   for (let tweet in filterTweetList) {
 
-    let selectedText = filterTweetList[tweet].innerText;
+    let selectedText = selectedTextClearLink(filterTweetList[tweet].innerText);
     console.log(selectedText);
     if (selectedText && selectedText.length > 0) {
       let xhttp = new XMLHttpRequest();
@@ -86,6 +86,11 @@ function isAttributeNews(attribute) {
   }
   return true;
 }
+
+function selectedTextClearLink(selectedText) {
+  return selectedText.split('http')[0].trim();
+}
+
 
 function createChildElement(responseText) {
   let childElement = document.createElement('div');
