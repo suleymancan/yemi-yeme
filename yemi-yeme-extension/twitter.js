@@ -1,7 +1,28 @@
-window.addEventListener('load', pageLoad);
+//only works when twitter is first loaded.
+window.addEventListener('load',pageLoad);
+
+let oldLength = -1;
+listen(window.history.length);
+function listen(currentLength) {
+  if (currentLength != oldLength) {
+    const elements = document.getElementsByClassName('yemi-yeme');
+    console.log(elements);
+    while(elements.length>0) elements[0].remove();
+    pageLoad();
+  }
+
+  oldLength = window.history.length;
+  setTimeout(function () {
+    listen(window.history.length);
+  }, 1000);
+}
 
 
+// twitter is first loaded works twice :(
+// ilk yuklenen twitte iki kere sonuc yaziyor.
 function pageLoad() {
+
+  console.log('page load calisti***************************')
 
   let tweetList = document.getElementsByClassName('TweetTextSize  js-tweet-text tweet-text');
 
@@ -19,6 +40,7 @@ function pageLoad() {
 
         if (this.readyState == 4 && this.status == 200) {
           filterTweetList[tweet].appendChild(createChildElement(this.responseText));
+
         }
 
       };
@@ -27,6 +49,7 @@ function pageLoad() {
 
     }
   }
+
 
 
 }
@@ -95,6 +118,7 @@ function selectedTextClearLink(selectedText) {
 function createChildElement(responseText) {
   let childElement = document.createElement('div');
   childElement.textContent = responseText;
+  childElement.classList.add('yemi-yeme');
 
   if (responseText == 'CLICKBAIT') {
     childElement.style.color = "red";
