@@ -1,25 +1,52 @@
-//only works when twitter is first loaded.
-window.addEventListener('load',pageLoad);
+(function () {
 
-let oldLength = -1;
+  const regexTwitterURLDomain = '(^(http|https):\\/\\/)?(?:www\\.)?twitter\\.com(\\/|$)$';
+
+  const regexAnyTwitterURL = '(^(http|https):\\/\\/)?(?:www\\.)?twitter\\.com\\/.*';
+
+  let homePageFirstLoad = false;
+
+  let oldLength = -1;
+
+
+// twitter ana sayfa tek seferde yuklenmedigi icin boyle bir seye ihtiyac duydum.
+  if(window.location.href.match(regexTwitterURLDomain)){
+    homePageFirstLoad = true;
+    window.addEventListener('load', function () {
+
+      const elements = document.getElementsByClassName('yemi-yeme');
+      while(elements.length>0) elements[0].remove();
+      pageLoad();
+    });
+  }
+
 listen(window.history.length);
+
+  // https://stackoverflow.com/a/49772691
 function listen(currentLength) {
+
   if (currentLength != oldLength) {
+    // twitter/user'dan twitter.com'a gelince, twitter ana sayfa tek seferde yuklenmedigi icin boyle bir seye ihtiyac duydum.
+    if(!homePageFirstLoad && window.location.href.match(regexTwitterURLDomain)){
+      location.reload();
+      homePageFirstLoad = true;
+    }
+    else{
     const elements = document.getElementsByClassName('yemi-yeme');
     console.log(elements);
     while(elements.length>0) elements[0].remove();
     pageLoad();
+    }
   }
 
   oldLength = window.history.length;
   setTimeout(function () {
     listen(window.history.length);
   }, 1000);
+
 }
 
 
-// twitter is first loaded works twice :(
-// ilk yuklenen twitte iki kere sonuc yaziyor.
 function pageLoad() {
 
   console.log('page load calisti***************************')
@@ -30,7 +57,7 @@ function pageLoad() {
 
   for (let tweet in filterTweetList) {
 
-    let selectedText = selectedTextClearLink(filterTweetList[tweet].innerText);
+    let selectedText = selectedTextPreProcess(filterTweetList[tweet].innerText);
     console.log(selectedText);
     if (selectedText && selectedText.length > 0) {
       let xhttp = new XMLHttpRequest();
@@ -102,16 +129,18 @@ function isChildTweetHasAttributeAndAttributeNews(child) {
 }
 
 
-//check youtube vs.
+// youtube, insta, face  vs. kontrol edilmeli mi?
 function isAttributeNews(attribute) {
-  if (attribute.match('^(http|https):\\/\\/twitter.com\\/.*')) {
+  if (attribute.match(regexAnyTwitterURL)) {
     return false;
   }
   return true;
 }
 
-function selectedTextClearLink(selectedText) {
-  return selectedText.split('http')[0].trim();
+function selectedTextPreProcess(selectedText) {
+  let removedLink = selectedText.split('http')[0].trim();
+  let removedInvalidCharacters = removedLink.replace(/[\[\]\▼]/g, "");
+  return removedInvalidCharacters;
 }
 
 
@@ -129,4 +158,5 @@ function createChildElement(responseText) {
   }
   return childElement;
 }
+})();
 
