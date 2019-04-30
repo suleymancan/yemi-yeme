@@ -14,16 +14,17 @@
     homePageFirstLoad = true;
     window.addEventListener('load', function () {
 
-      const elements = document.getElementsByClassName('yemi-yeme');
-      while(elements.length>0) elements[0].remove();
+      oldYemiYemeClear();
       pageLoad();
     });
   }
 
 listen(window.history.length);
+newTweetListen();
 
   // https://stackoverflow.com/a/49772691
 function listen(currentLength) {
+
 
   if (currentLength != oldLength) {
     // twitter/user'dan twitter.com'a gelince, twitter ana sayfa tek seferde yuklenmedigi icin boyle bir seye ihtiyac duydum.
@@ -32,9 +33,7 @@ function listen(currentLength) {
       homePageFirstLoad = true;
     }
     else{
-    const elements = document.getElementsByClassName('yemi-yeme');
-    console.log(elements);
-    while(elements.length>0) elements[0].remove();
+    oldYemiYemeClear();
     pageLoad();
     }
   }
@@ -47,14 +46,45 @@ function listen(currentLength) {
 }
 
 
+function newTweetListen() {
+
+  let newTweet = document.getElementsByClassName('new-tweets-bar js-new-tweets-bar')[0];
+  let newTweetHomeButton =  document.getElementsByClassName('js-nav js-tooltip js-dynamic-tooltip')[0];
+  // iyi bir yaklasim degil. yeni tweetlere ulasmam gerek.
+  if(newTweet != undefined){
+  newTweet.onclick = function () {
+
+    location.reload();
+
+  };
+   if(window.location.href.match( regexTwitterURLDomain)){
+
+      newTweetHomeButton.onclick = function () {
+        location.reload();
+      }
+    }
+  }
+
+  setTimeout(function () {
+    newTweetListen();
+  }, 2000);
+}
+
+
+
+function oldYemiYemeClear() {
+  const elements = document.getElementsByClassName('yemi-yeme');
+  while(elements.length>0) elements[0].remove();
+}
+
 function pageLoad() {
 
-  console.log('page load calisti***************************')
+  console.log('page load calisti***************************');
 
   let tweetList = document.getElementsByClassName('TweetTextSize  js-tweet-text tweet-text');
-
+  console.log(tweetList[0]);
   let filterTweetList = doFilterTweetList(tweetList);
-
+  console.log('filterTweetList length->>', filterTweetList.length);
   for (let tweet in filterTweetList) {
 
     let selectedText = selectedTextPreProcess(filterTweetList[tweet].innerText);
@@ -139,8 +169,8 @@ function isAttributeNews(attribute) {
 
 function selectedTextPreProcess(selectedText) {
   let removedLink = selectedText.split('http')[0].trim();
-  let removedInvalidCharacters = removedLink.replace(/[\[\]\▼]/g, "");
-  return removedInvalidCharacters;
+  return removedLink.replace(/[\[\]\▼\|]/g, "");
+
 }
 
 
