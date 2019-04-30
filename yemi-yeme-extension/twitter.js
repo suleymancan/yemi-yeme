@@ -20,10 +20,26 @@
   }
 
 listen(window.history.length);
-newTweetListen();
 
   // https://stackoverflow.com/a/49772691
 function listen(currentLength) {
+
+  let newTweet = document.getElementsByClassName('new-tweets-bar js-new-tweets-bar')[0];
+  let newTweetHomeButton =  document.getElementsByClassName('js-nav js-tooltip js-dynamic-tooltip')[0];
+  // iyi bir yaklasim degil. yeni tweetlere ulasmam gerek.
+  if(newTweet != undefined){
+    newTweet.onclick = function () {
+
+      location.reload();
+
+    };
+    if(window.location.href.match( regexTwitterURLDomain)){
+
+      newTweetHomeButton.onclick = function () {
+        location.reload();
+      }
+    }
+  }
 
 
   if (currentLength != oldLength) {
@@ -46,29 +62,6 @@ function listen(currentLength) {
 }
 
 
-function newTweetListen() {
-
-  let newTweet = document.getElementsByClassName('new-tweets-bar js-new-tweets-bar')[0];
-  let newTweetHomeButton =  document.getElementsByClassName('js-nav js-tooltip js-dynamic-tooltip')[0];
-  // iyi bir yaklasim degil. yeni tweetlere ulasmam gerek.
-  if(newTweet != undefined){
-  newTweet.onclick = function () {
-
-    location.reload();
-
-  };
-   if(window.location.href.match( regexTwitterURLDomain)){
-
-      newTweetHomeButton.onclick = function () {
-        location.reload();
-      }
-    }
-  }
-
-  setTimeout(function () {
-    newTweetListen();
-  }, 2000);
-}
 
 
 
