@@ -29,7 +29,7 @@
       setTweetListLength(tweetListLength);
     }
 
-    if (newTweetClick == true && newTweet != undefined) {
+    if (newTweetClick && newTweet !== undefined) {
       newTweetClick = false;
       newTweet.onclick = function () {
         oldYemiYemeClear();
@@ -37,7 +37,7 @@
       };
     }
 
-    if (currentLength != oldLength) {
+    if (currentLength !== oldLength) {
       oldYemiYemeClear();
       pageLoad();
     }
@@ -80,7 +80,7 @@
 
         xhttp.onreadystatechange = function () {
 
-          if (this.readyState == 4 && this.status == 200) {
+          if (this.readyState === 4 && this.status === 200) {
             filterTweetList[tweet].appendChild(createChildElement(this.responseText));
 
           }
@@ -96,7 +96,7 @@
   }
 
   function doFilterTweetList(tweetList) {
-    let filterTweetList = new Array();
+    let filterTweetList = [];
     for (let tweet in tweetList) {
       if (isTweetLangEqualsTR(tweetList[tweet]) && isTweetChildElementNews(tweetList[tweet])) {
         filterTweetList[tweet] = tweetList[tweet];
@@ -141,7 +141,7 @@
 
   function selectedTextPreProcess(selectedText) {
     let removedLink = selectedText.split('http')[0].trim();
-    return removedLink.replace(/[\[\]\▼\|]/g, "");
+    return removedLink.replace(/[\[\]▼|]/g, "");
 
   }
 
@@ -151,7 +151,7 @@
     childElement.textContent = responseText;
     childElement.classList.add('yemi-yeme');
 
-    if (responseText == 'CLICKBAIT') {
+    if (responseText === 'CLICKBAIT') {
       childElement.style.color = "red";
       childElement.style.textAlign = "right";
     } else {
