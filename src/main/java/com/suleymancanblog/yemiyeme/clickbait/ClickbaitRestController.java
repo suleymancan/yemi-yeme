@@ -19,8 +19,15 @@ public class ClickbaitRestController {
 	@GetMapping
 	public String test(@RequestParam String source){
 		final PrizmaFeature prizmaFeature = clickbaitService.createNewsFeature(source);
-		final NewsLabel predict = clickbaitService.predict(prizmaFeature);
-		return predict.getNewsLabel();
+		try {
+			final NewsLabel predict = clickbaitService.predict(prizmaFeature);
+			return predict.getNewsLabel();
+		}
+		catch (Exception e){
+			e.printStackTrace();
+		}
+
+		return "ERROR";
 	}
 
 
