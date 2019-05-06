@@ -1,5 +1,4 @@
 app:
   name: "YemiYeme"
   master: "local"
-  data-path: "/home/suleymancan/dev/yemi-yeme/src/main/resources/static/yemi-yeme-text2arff-dataset.txt"
   model-path: "/home/suleymancan/dev/yemi-yeme/src/main/resources/static/model/prizma/YemiYemeModel"

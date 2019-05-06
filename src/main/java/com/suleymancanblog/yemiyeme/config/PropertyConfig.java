@@ -20,7 +20,5 @@ public class PropertyConfig {
 
 	private String master;
 
-	private String dataPath;
-
 	private String modelPath;
 }

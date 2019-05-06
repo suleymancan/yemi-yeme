@@ -1,7 +1,7 @@
 package com.suleymancanblog.yemiyeme.clickbait;
 
-import com.suleymancanblog.yemiyeme.prizma.PrizmaPunctuationService;
 import com.suleymancanblog.yemiyeme.prizma.PrizmaFeatureService;
+import com.suleymancanblog.yemiyeme.prizma.PrizmaPunctuationService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.spark.api.java.JavaRDD;
@@ -10,9 +10,6 @@ import org.apache.spark.mllib.linalg.Vector;
 import org.apache.spark.mllib.linalg.Vectors;
 import org.apache.spark.mllib.tree.model.DecisionTreeModel;
 import org.springframework.stereotype.Service;
-import weka.classifiers.functions.MultilayerPerceptron;
-import weka.core.DenseInstance;
-import weka.core.Instance;
 
 import java.util.Collections;
 
@@ -29,8 +26,6 @@ public class ClickbaitService {
 	private final JavaSparkContext javaSparkContext;
 
 	private final DecisionTreeModel decisionTreeModel;
-
-	private final MultilayerPerceptron multilayerPerceptron;
 
 	private final PrizmaFeatureService prizmaFeatureService;
 
@@ -98,34 +93,6 @@ public class ClickbaitService {
 		return doubleResultConvertText(predicition);
 	}
 
-
-	NewsLabel predictWeka(PrizmaFeature prizmaFeature) throws Exception {
-		//@formatter:off
-		final Instance instance = new DenseInstance(18);
-		instance.setValue(0, prizmaFeature.getLengthOfTitle());
-		instance.setValue(1, prizmaFeature.getNumberCount());
-		instance.setValue(2, prizmaFeature.getPunctuationColonRatio());
-		instance.setValue(3, prizmaFeature.getPunctuationCommaRatio());
-		instance.setValue(4, prizmaFeature.getPunctuationCountOfTitle());
-		instance.setValue(5, prizmaFeature.getPunctuationDashRatio());
-		instance.setValue(6, prizmaFeature.getPunctuationDoubleQuoteRatio());
-		instance.setValue(7, prizmaFeature.getPunctuationEllipsisRatio());
-		instance.setValue(8, prizmaFeature.getPunctuationExclamationRatio());
-		instance.setValue(9, prizmaFeature.getPunctuationQuestionMarkRatio());
-		instance.setValue(10, prizmaFeature.getPunctuationRatio());
-		instance.setValue(11, prizmaFeature.getPunctuationSemiColonRatio());
-		instance.setValue(12, prizmaFeature.getStopWordRatio());
-		instance.setValue(13, prizmaFeature.getWhyCount());
-		instance.setValue(14, prizmaFeature.getWordCountOfTitle());
-		instance.setValue(15, prizmaFeature.getWordLengthAverage());
-		instance.setValue(16, prizmaFeature.getWordLengthVariance());
-
-		// index 17: class
-
-		//@formatter:on
-		final double prediction = multilayerPerceptron.classifyInstance(instance);
-		return doubleResultConvertText(prediction);
-	}
 
 
 

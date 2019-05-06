@@ -6,7 +6,6 @@ import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.mllib.tree.model.DecisionTreeModel;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import weka.classifiers.functions.MultilayerPerceptron;
 
 /**
  * Created on April, 2019
@@ -31,8 +30,4 @@ public class SparkConfig {
 		return DecisionTreeModel.load(javaSparkContext.sc(), propertyConfig.getModelPath());
 	}
 
-	@Bean
-	public MultilayerPerceptron multilayerPerceptron() throws Exception {
-		return (MultilayerPerceptron) weka.core.SerializationHelper.read("weka-mlp-yemi-yeme.model");
-	}
 }
