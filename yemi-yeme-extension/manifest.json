@@ -4,7 +4,10 @@
     "manifest_version": 2,
     "author":"Süleyman Can",
     "description": "Sosyal medya clickbait dedektörü!",
-
+    "permissions": [
+        "webRequest",
+        "<all_urls>"
+    ],
     "icons": {
         "16": "yemi-yeme.png",
         "48": "yemi-yeme.png",
@@ -18,7 +21,7 @@
             ],
             "js": ["twitter.js"]
         }
-    ],
+    ]
 
     
 }
