@@ -1,7 +1,9 @@
 (function () {
 
   let oldLength = -1;
-  
+
+// sadece yeni yüklenen tweetlere sorgu yapılması için tutulan flag.
+  let worked = false;
 
   const regexAnySocialMediaURL = '(^(http|https):\\/\\/)?(?:www\\.|open)?(instagram|facebook|twitter|youtube|youtu|soundcloud|spotify|t|tumblr|github|gitlab|medium)\\.(com|be|co)\\/.*';
 
@@ -12,15 +14,15 @@
   };
 
 
-  let oldTweetListLength = document.getElementsByClassName('TweetTextSize  js-tweet-text tweet-text').length;
+  let oldTweetListLength = document.getElementsByClassName('TweetTextSize js-tweet-text tweet-text').length;
   let newTweetClick = true;
   listen(window.history.length);
 
 
-  // https://stackoverflow.com/a/49772691
+// https://stackoverflow.com/a/49772691
   function listen(currentLength) {
 
-    let tweetListLength = document.getElementsByClassName('TweetTextSize  js-tweet-text tweet-text').length;
+    let tweetListLength = document.getElementsByClassName('TweetTextSize js-tweet-text tweet-text').length;
 
     let newTweet = document.getElementsByClassName('new-tweets-bar js-new-tweets-bar')[0];
 
@@ -32,12 +34,12 @@
     if (newTweetClick && newTweet !== undefined) {
       newTweetClick = false;
       newTweet.onclick = function () {
-        oldYemiYemeClear();
         pageLoad();
       };
     }
 
     if (currentLength !== oldLength) {
+      oldTweetListLength = 0;
       oldYemiYemeClear();
       pageLoad();
     }
@@ -49,38 +51,63 @@
 
   }
 
-
-//tweetlerin tamaminin yenilenmesi yerine degisen kismin yenilenmesi saglanabilir.
-  function setTweetListLength(newTweetListLength) {
-    oldTweetListLength = newTweetListLength;
-    oldYemiYemeClear();
-    pageLoad();
-  }
-
-
   function oldYemiYemeClear() {
     const elements = document.getElementsByClassName('yemi-yeme');
     while (elements.length > 0) elements[0].remove();
   }
 
+
+
+  function setTweetListLength(newTweetListLength) {
+    oldTweetListLength = newTweetListLength;
+    pageLoad();
+  }
+
+
+
+
+  function filterNewTweetList(tweetList) {
+    let filterTweetList = [];
+    let k = 0;
+
+    for (let i = 0; i < tweetList.length; i++) {
+      let yemiYeme = tweetList[i].getElementsByClassName('yemi-yeme');
+      if(yemiYeme.length === 0){
+        filterTweetList[k] = tweetList[i];
+        k++;
+      }
+    }
+    return filterTweetList;
+  }
+
   function pageLoad() {
 
 
-    let tweetList = document.getElementsByClassName('TweetTextSize  js-tweet-text tweet-text');
+    let tweetList = document.getElementsByClassName('TweetTextSize js-tweet-text tweet-text');
+
+    console.log('tweetList length -> ### ', tweetList.length);
+    if(worked){
+      tweetList = filterNewTweetList(tweetList);
+      console.log('tweetList operation length -> ###', tweetList.length);
+    }
 
     let filterTweetList = doFilterTweetList(tweetList);
+
+    console.log('filterTweetList length -> ### ', filterTweetList.length);
 
     for (let tweet in filterTweetList) {
 
       let selectedText = selectedTextPreProcess(filterTweetList[tweet].innerText);
 
       if (selectedText && selectedText.length > 0) {
+
         let xhttp = new XMLHttpRequest();
         let url = "http://localhost:8080/api/yemi-yeme?source=" + selectedText;
 
         xhttp.onreadystatechange = function () {
 
           if (this.readyState === 4 && this.status === 200) {
+            debugger;
             filterTweetList[tweet].appendChild(createChildElement(this.responseText));
 
           }
@@ -92,14 +119,17 @@
       }
     }
 
+    worked = true;
 
   }
 
   function doFilterTweetList(tweetList) {
     let filterTweetList = [];
+    let i = 0;
     for (let tweet in tweetList) {
       if (isTweetLangEqualsTR(tweetList[tweet]) && isTweetChildElementNews(tweetList[tweet])) {
-        filterTweetList[tweet] = tweetList[tweet];
+        filterTweetList[i] = tweetList[tweet];
+        i++;
       }
     }
     return filterTweetList;
@@ -134,7 +164,7 @@
   }
 
 
-// youtube, insta, face  vs. kontrol edilmeli mi?
+// youtube, insta, face vs. kontrol edilmeli mi?
   function isAttributeNews(attribute) {
     return !attribute.match(regexAnySocialMediaURL);
   }
@@ -147,6 +177,7 @@
 
 
   function createChildElement(responseText) {
+
     let childElement = document.createElement('div');
     childElement.textContent = responseText;
     childElement.classList.add('yemi-yeme');
@@ -161,4 +192,3 @@
     return childElement;
   }
 })();
-
