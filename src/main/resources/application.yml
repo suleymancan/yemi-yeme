@@ -1,4 +1,4 @@
 app:
   name: "YemiYeme"
   master: "local"
-  model-path: "/home/suleymancan/dev/yemi-yeme/src/main/resources/static/model/prizma/YemiYemeModel"
+  model-path: "${model_path:src/main/resources/static/model/prizma/YemiYemeModel}"
