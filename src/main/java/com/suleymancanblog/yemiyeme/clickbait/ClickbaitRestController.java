@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.concurrent.Callable;
+
 /**
  * Created on April, 2019
  *
@@ -19,10 +21,12 @@ public class ClickbaitRestController {
 
 	@CrossOrigin
 	@GetMapping
-	public String test(@RequestParam String source) {
+	public Callable<String> test(@RequestParam String source) {
+		return () -> {
 		final PrizmaFeature prizmaFeature = clickbaitService.createNewsFeature(source);
 		final NewsLabel predict = clickbaitService.predict(prizmaFeature);
 		return predict.getNewsLabel();
+		};
 	}
 
 	@ExceptionHandler(Exception.class)

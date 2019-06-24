@@ -102,7 +102,7 @@
       if (selectedText && selectedText.length > 0) {
 
         let xhttp = new XMLHttpRequest();
-        let url = "http://localhost:8080/api/yemi-yeme?source=" + selectedText;
+        let url = "http://46.101.185.67:8080/api/yemi-yeme?source=" + selectedText;
 
         xhttp.onreadystatechange = function () {
 

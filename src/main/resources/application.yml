@@ -2,3 +2,14 @@ app:
   name: "YemiYeme"
   master: "local"
   model-path: "${model_path:src/main/resources/static/model/prizma/YemiYemeModel}"
+server:
+  port: 8443
+  ssl:
+    key-store: ${keystore_path:classpath:keystore/keystore.p12}
+    key-store-password: keystore
+    key-store-type: PKCS12
+    key-alias: tomcat
+
+security:
+  require-ssl: true
+
