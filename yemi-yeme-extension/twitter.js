@@ -1,5 +1,6 @@
 (function () {
 
+  // listen metodu
   let oldLength = -1;
 
 // sadece yeni yüklenen tweetlere sorgu yapılması için tutulan flag.
@@ -7,6 +8,7 @@
 
   const regexAnySocialMediaURL = '(^(http|https):\\/\\/)?(?:www\\.|open)?(instagram|facebook|twitter|youtube|youtu|soundcloud|spotify|t|tumblr|github|gitlab|medium)\\.(com|be|co)\\/.*';
 
+  // yeni tweetler icin home butonuna basıldığında
   let newTweetHomeButton = document.getElementsByClassName('js-nav js-tooltip js-dynamic-tooltip')[0];
   newTweetHomeButton.onclick = function () {
     oldYemiYemeClear();
@@ -57,13 +59,10 @@
   }
 
 
-
   function setTweetListLength(newTweetListLength) {
     oldTweetListLength = newTweetListLength;
     pageLoad();
   }
-
-
 
 
   function filterNewTweetList(tweetList) {
@@ -72,7 +71,7 @@
 
     for (let i = 0; i < tweetList.length; i++) {
       let yemiYeme = tweetList[i].getElementsByClassName('yemi-yeme');
-      if(yemiYeme.length === 0){
+      if (yemiYeme.length === 0) {
         filterTweetList[k] = tweetList[i];
         k++;
       }
@@ -85,15 +84,15 @@
 
     let tweetList = document.getElementsByClassName('TweetTextSize js-tweet-text tweet-text');
 
-    console.log('tweetList length -> ### ', tweetList.length);
-    if(worked){
+
+    if (worked) {
       tweetList = filterNewTweetList(tweetList);
-      console.log('tweetList operation length -> ###', tweetList.length);
+
     }
 
     let filterTweetList = doFilterTweetList(tweetList);
 
-    console.log('filterTweetList length -> ### ', filterTweetList.length);
+
 
     for (let tweet in filterTweetList) {
 
@@ -164,7 +163,7 @@
   }
 
 
-// youtube, insta, face vs. kontrol edilmeli mi?
+
   function isAttributeNews(attribute) {
     return !attribute.match(regexAnySocialMediaURL);
   }
