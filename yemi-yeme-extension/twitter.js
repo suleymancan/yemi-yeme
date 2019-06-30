@@ -6,7 +6,7 @@
 // sadece yeni yüklenen tweetlere sorgu yapılması için tutulan flag.
   let worked = false;
 
-  const regexAnySocialMediaURL = '(^(http|https):\\/\\/)?(?:www\\.|open)?(instagram|facebook|twitter|youtube|youtu|soundcloud|spotify|t|tumblr|github|gitlab|medium)\\.(com|be|co)\\/.*';
+  const regexAnySocialMediaURL = '(^(http|https):\\/\\/)?(?:www\\.|open)?(instagram|facebook|twitter|youtube|youtu|soundcloud|spotify|t|tumblr|github|gitlab|medium|pscp|eksisozluk)\\.(com|be|co|tv)\\/.*';
 
   // yeni tweetler icin home butonuna basıldığında
   let newTweetHomeButton = document.getElementsByClassName('js-nav js-tooltip js-dynamic-tooltip')[0];
@@ -70,7 +70,7 @@
     let k = 0;
 
     for (let i = 0; i < tweetList.length; i++) {
-      let yemiYeme = tweetList[i].getElementsByClassName('yemi-yeme');
+      let yemiYeme = tweetList[i].parentElement.getElementsByClassName('yemi-yeme');
       if (yemiYeme.length === 0) {
         filterTweetList[k] = tweetList[i];
         k++;
@@ -83,14 +83,16 @@
 
 
     let tweetList = document.getElementsByClassName('TweetTextSize js-tweet-text tweet-text');
+    console.log('tweetList length -> ### ', tweetList.length);
 
 
-    if (worked) {
       tweetList = filterNewTweetList(tweetList);
+      console.log('tweetList operation length -> ###', tweetList.length);
 
-    }
+
 
     let filterTweetList = doFilterTweetList(tweetList);
+    console.log('filterTweetList length -> ### ', filterTweetList.length);
 
 
 
@@ -118,7 +120,7 @@
       }
     }
 
-    worked = true;
+
 
   }
 
