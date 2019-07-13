@@ -9,7 +9,7 @@ Spark Context ve model [SparkConfig](https://github.com/suleymancan/yemi-yeme/bl
 
 ### Servis Katmanı
 [ClickbaitService](https://github.com/suleymancan/yemi-yeme/blob/master/src/main/java/com/suleymancanblog/yemiyeme/clickbait/ClickbaitService.java), haber başlığından özellik çıkarımı ve makine öğrenmesi modelini kullanarak sınıf tahmin etme işlerini yapmaktadır. <br/>
-Gelen haber başlığından özellik çıkarımı işlemi, [prizma](https://github.com/suleymancan/yemi-yeme/tree/master/src/main/java/com/suleymancanblog/yemiyeme/prizma) paketinde, [Prizma](https://code.google.com/archive/p/prizma-text-classification/) programının kaynak kodları aracılığıyla yapılmaktadır. Ayırt edici olarak tespit edilen özellikler, [PrizmaFeature](https://github.com/suleymancan/yemi-yeme/blob/master/src/main/java/com/suleymancanblog/yemiyeme/clickbait/PrizmaFeature.java) sınıfı kullanılarak sarmalanmıştır. Sınıf etiketleri enum[https://github.com/suleymancan/yemi-yeme/blob/master/src/main/java/com/suleymancanblog/yemiyeme/clickbait/NewsLabel.java] olarak tutulmaktadır.
+Gelen haber başlığından özellik çıkarımı işlemi, [prizma](https://github.com/suleymancan/yemi-yeme/tree/master/src/main/java/com/suleymancanblog/yemiyeme/prizma) paketinde, [Prizma](https://code.google.com/archive/p/prizma-text-classification/) programının kaynak kodları aracılığıyla yapılmaktadır. Ayırt edici olarak tespit edilen özellikler, [PrizmaFeature](https://github.com/suleymancan/yemi-yeme/blob/master/src/main/java/com/suleymancanblog/yemiyeme/clickbait/PrizmaFeature.java) sınıfı kullanılarak sarmalanmıştır. Sınıf etiketleri [enum](https://github.com/suleymancan/yemi-yeme/blob/master/src/main/java/com/suleymancanblog/yemiyeme/clickbait/NewsLabel.java) olarak tutulmaktadır.
 
 
 ### Controller Katmanı
@@ -19,7 +19,6 @@ Haber başlığının özelliklerini çıkar.<br/>
 Modele sorgu gerçekleştir.<br/>
 Sorgu sonucunu dön. (CLICKBAIT / NOT CLICKBAIT)<br/>
 ```java
-  @CrossOrigin
 	@GetMapping
 	public String test(@RequestParam String source) {
 		final PrizmaFeature prizmaFeature = clickbaitService.createNewsFeature(source);
