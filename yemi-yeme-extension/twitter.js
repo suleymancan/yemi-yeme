@@ -83,17 +83,12 @@
 
 
     let tweetList = document.getElementsByClassName('TweetTextSize js-tweet-text tweet-text');
-    console.log('tweetList length -> ### ', tweetList.length);
 
 
-      tweetList = filterNewTweetList(tweetList);
-      console.log('tweetList operation length -> ###', tweetList.length);
-
+    tweetList = filterNewTweetList(tweetList);
 
 
     let filterTweetList = doFilterTweetList(tweetList);
-    console.log('filterTweetList length -> ### ', filterTweetList.length);
-
 
 
     for (let tweet in filterTweetList) {
@@ -119,7 +114,6 @@
 
       }
     }
-
 
 
   }
@@ -163,7 +157,6 @@
   function isChildTweetHasAttributeAndAttributeNews(child) {
     return child.hasAttribute('data-expanded-url') && isAttributeNews(child.getAttribute('data-expanded-url'));
   }
-
 
 
   function isAttributeNews(attribute) {
