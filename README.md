@@ -1,5 +1,4 @@
-# yemi-yeme
-Clickbait detection extension for Turkish news on social media.
+
 #
 ### Makine Öğrenmesi Modelinin Tanıtılması
 İlk olarak pom.xml dosyasına spark-mllib_2.11 bağımlılığı eklenir. <br>
