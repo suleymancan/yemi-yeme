@@ -1,4 +1,4 @@
-
+Yazı: [Clickbait Tespiti İçin Hobi Projesi: Yemi-Yeme](https://medium.com/@suleymancan/clickbait-tespiti-i%CC%87%C3%A7in-hobi-projesi-yemi-yeme-8dba667f5f0b)
 #
 ### Makine Öğrenmesi Modelinin Tanıtılması
 İlk olarak pom.xml dosyasına spark-mllib_2.11 bağımlılığı eklenir. <br>
